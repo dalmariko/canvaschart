@@ -1,0 +1,19 @@
+The file contains data on two Time Series and the relationship between them. You should:
+1. Build a graph with both rows, each must be scaled on its axis.
+2. Mark green periods in which "type_of_rho": "reverse", and red - "type_of_rho": "direct".
+Other values variable "type_of_rho" must be ignored
+
+In the attached file, we added the example of the chart
+
+--
+TenViz Team
+tenviz.com
++380675061282
+
+
+Файл містить дані про два часових ряду і про відносини між ними. Ти повинен:
+1. Створіть графік з обома рядками, кожна з яких повинна бути масштабована на своїй осі.
+2. Позначте зелені періоди, в яких "type_of_rho": "зворотний", а червоний - "type_of_rho": "direct".
+Інші значення змінної "type_of_rho" необхідно ігнорувати
+
+У прикріпленому файлі ми додали приклад діаграми
