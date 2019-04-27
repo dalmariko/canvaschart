@@ -47,7 +47,7 @@ class Chart{
         /**
          * @param data - array
          * @param fild - fild in array
-         * @param desc === true - max ferst, === false - max last
+         * @param desc === true -> max ferst, === false -> max last
          * @returns {max or min number in array}
          */
         function sortMaxMin(data, fild = 'value', desc = true) {
@@ -63,17 +63,16 @@ class Chart{
 
 
         let max=sortMaxMin(test);
-        let min=sortMaxMin(test,'value',false);
-
 
 
         let canvas=document.querySelector(`[data-id="${settings.id}"] canvas `);
 
         let width=canvas.getBoundingClientRect().width*pixelRatio;
         let heigth=canvas.getBoundingClientRect().height*pixelRatio;
-canvas.width=width;
-canvas.height=heigth;
-        console.log(max,min,max-min);
+
+        canvas.width=width;
+        canvas.height=heigth;
+
         let scaleX=width/chartPoints.length;
         let scaleY=heigth/max;
 
@@ -90,7 +89,8 @@ canvas.height=heigth;
 
 
         let context=canvas.getContext('2d');
-
+        context.fillStyle='white';
+        context.fillRect(0,0,canvas.width,canvas.height);
         context.beginPath();
         context.lineJoin = 'bevel';
         context.lineCap = 'butt';
@@ -99,7 +99,7 @@ canvas.height=heigth;
         context.strokeStyle = settings.chartColor;
 
         chartPoints.forEach((y, x)=>{
-                context.lineTo(x*scaleX,y['value']*0.1);
+                context.lineTo(x*scaleX,y['value']*scaleY);
         });
 
         context.stroke();

@@ -131,15 +131,17 @@ function sortMaxMin(data, fild = 'value', desc = true) {
 // };
 
 /*
+
 function randomInteger(min, max) {
     let rand = min - 0.5 + Math.random() * (max - min + 1);
     rand = Math.round(rand);
     return rand;
 }
 let data={SecondLineData:[]};
-for(let i=0;i<500;i++){
-    let x= {value:randomInteger(1,1500)};
+for(let i=0;i<2500;i++){
+    let x= {value:randomInteger(1,10000)};
     data.SecondLineData.push(x);
 };
 
-new Chart(data).init;*/
+new Chart(data).init;
+*/
