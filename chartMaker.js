@@ -5,6 +5,7 @@ class Chart{
     }
 
   get init() {
+        console.log(this._settings);
         Chart.addTemplate(this._settings);
         Chart.renderChart(this._settings);
         return this;
