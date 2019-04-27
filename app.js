@@ -52,32 +52,84 @@ const data = {
 };
 */
 
-function sorteg(data, fild = 'value', {asc = true}={}) {
-    data.sort((a, b) => {
-        return asc ? (a[fild].localeCompare(b[fild])) : (b[fild].localeCompare(a[fild]))
-    });
-   return data[0];
-};
 
 
-let promise=new FetchHttp();
+/*
+let test = answer['FirstLineData'].slice();
 
-promise.get(partToData)
-    .then(answer=> {
-        let test = answer['FirstLineData'].slice();
-
-        console.log(sorteg(test,'value'));
-
-          /*  let chartContainer = document.createElement('div');
-            chartContainer.classList.add('tchart');
-            document.getElementById('charts').appendChild(chartContainer);*/
-
-        /*    let chart = new ChartMaker(chartContainer);
-            chart.setData(line);
-            charts.push(chart);*/
+let filteredData = test.filter(item => {
+    return item['value'] !== null
+});
+filteredData.forEach(item => {
+    return (item['value'] = item['value'] * 1)
+});
+*/
 
 
-    })
-    .catch(err => console.error(err));
+/**
+ * @param data - array
+ * @param fild - fild in array
+ * @param desc === true - max ferst, === false - max last
+ * @returns {max or min number in array}
+ */
+function sortMaxMin(data, fild = 'value', desc = true) {
+    try {
+        return data.slice().sort((a, b) => {
+            return desc ? b[fild] - a[fild] : a[fild] - b[fild];
+        })[0][fild];
+    }
+    catch (e) {
+        console.error(e)
+    }
+}
+
+
+
+ let promise=new FetchHttp();
+
+ promise.get(partToData)
+ .then( answer => {
+     new Chart(answer).init;
+ })
+ .catch(err => console.error(err));
+
+
+// const data = {
+//     FirstLineData: [
+//         {
+//             "date": "2010-01-01",
+//             "value": null
+//         },
+//         {
+//             "date": "2010-11-19",
+//             "value": "73.5927309188227"
+//         }
+//     ],
+//     SecondLineData: [
+//         {
+//             "date": "2010-01-01",
+//             "value": "1115.09997558594"
+//         },
+//         {
+//             "date": "2010-03-23",
+//             "value": "1174.17004394531"
+//         }
+//     ],
+//     ArrowsData: [
+//         {
+//             "type_of_rho": "direct",
+//             "min_period_id": "2010-11-15",
+//             "max_period_id": "2010-11-18",
+//             "tau": 2
+//         },
+//         {
+//             "type_of_rho": "reverse",
+//             "min_period_id": "2010-11-19",
+//             "max_period_id": "2010-11-25",
+//             "tau": 9
+//         }
+//     ]
+// };
+
 
 
