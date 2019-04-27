@@ -5,7 +5,6 @@ class Chart{
     }
 
   get init() {
-        console.log(this._settings);
         Chart.addTemplate(this._settings);
         Chart.renderChart(this._settings);
         return this;
@@ -72,7 +71,8 @@ class Chart{
 
         let width=canvas.getBoundingClientRect().width*pixelRatio;
         let heigth=canvas.getBoundingClientRect().height*pixelRatio;
-
+canvas.width=width;
+canvas.height=heigth;
         console.log(max,min,max-min);
         let scaleX=width/chartPoints.length;
         let scaleY=heigth/max;
@@ -99,7 +99,7 @@ class Chart{
         context.strokeStyle = settings.chartColor;
 
         chartPoints.forEach((y, x)=>{
-            context.lineTo(x*scaleX,y['value']*scaleY);
+                context.lineTo(x*scaleX,y['value']*0.1);
         });
 
         context.stroke();

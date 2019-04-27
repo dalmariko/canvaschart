@@ -84,14 +84,13 @@ function sortMaxMin(data, fild = 'value', desc = true) {
 }
 
 
- //
- // let promise=new FetchHttp();
- //
- // promise.get(partToData)
- // .then( answer => {
- //     new Chart(answer).init;
- // })
- // .catch(err => console.error(err));
+ let promise=new FetchHttp();
+
+ promise.get(partToData)
+ .then( answer => {
+     new Chart(answer).init;
+ })
+ .catch(err => console.error(err));
 
 
 // const data = {
@@ -131,7 +130,7 @@ function sortMaxMin(data, fild = 'value', desc = true) {
 //     ]
 // };
 
-
+/*
 function randomInteger(min, max) {
     let rand = min - 0.5 + Math.random() * (max - min + 1);
     rand = Math.round(rand);
@@ -143,4 +142,4 @@ for(let i=0;i<500;i++){
     data.SecondLineData.push(x);
 };
 
-new Chart(data).init;
+new Chart(data).init;*/
