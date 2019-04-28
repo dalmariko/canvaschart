@@ -42,12 +42,11 @@ class Chart{
     static renderChart(settings){
 
         let chartPoints=settings.FirstLineData;
+        // let chartPoints=settings.SecondLineData;
 
-         let test = chartPoints.slice();
+         let maxMinSort = chartPoints.slice();
 
-         let filteredData = test
-             .filter(item => {return item['value'] !== null})
-             .forEach(item => {return (item['value'] = item['value'] * 1)});
+         let filteredData = chartPoints.filter(item => {return item['value'] !== null});
 
 
         /**
@@ -60,17 +59,17 @@ class Chart{
             try {
                 return data.slice().sort((a, b) => {
                     return desc ? b[fild] - a[fild] : a[fild] - b[fild];
-                })[0][fild];
+                });
             }
             catch (e) {
                 console.error(e)
             }
         }
 
-        let max=sortMaxMin(test);
-        let min=sortMaxMin(test,'value',false);
+        let max=sortMaxMin(maxMinSort)[0]['value'];
+        let min=sortMaxMin(maxMinSort,'value',false)[0]['value'];
 
-        this.scaleX=this.width/chartPoints.length;
+        this.scaleX=this.width/filteredData.length;
         this.scaleY=this.heigth/max;
 
         console.log(
@@ -80,9 +79,8 @@ class Chart{
             'heigth',this.heigth,'\n',
             'scaleX',this.scaleX,'\n',
             'scaleY',this.scaleY,'\n',
-            'length',chartPoints.length,'\n',
+            'length',filteredData.length,'\n',
         );
-
 
 
         let context=this.canvas.getContext('2d');
@@ -99,8 +97,8 @@ class Chart{
         context.globalAlpha=settings.globalAlpha;
         context.strokeStyle = settings.SecondLineDataColor;
 
-        chartPoints.forEach((y, x)=>{
-                context.lineTo(x*this.scaleX,y['value']*this.scaleY);
+        filteredData.forEach((y, x)=>{
+            context.lineTo(x*this.scaleX,y['value']*this.scaleY);
         });
 
         context.stroke();
