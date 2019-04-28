@@ -5,7 +5,9 @@ class Chart{
     }
 
   get init() {
+        console.log(this._settings);
         Chart.addTemplate(this._settings);
+        Chart.bildCharts(this._settings);
         Chart.renderChart(this._settings);
         return this;
     }
@@ -23,25 +25,29 @@ class Chart{
         </div>`;
     }
 
+    static bildCharts(settings) {
 
+        this.canvas=document.querySelector(`[data-id="${settings.id}"] canvas`);
+
+        this.width=this.canvas.getBoundingClientRect().width*settings.pixelRatio;
+        this.heigth=this.canvas.getBoundingClientRect().height*settings.pixelRatio;
+
+        this.canvas.width=this.width;
+        this.canvas.height=this.heigth;
+
+        return this;
+    }
 
 
     static renderChart(settings){
-        let pixelRatio= window.devicePixelRatio;
-        let lineWidth=1 * pixelRatio;
 
-        let chartPoints=settings.SecondLineData;
-
-
+        let chartPoints=settings.FirstLineData;
 
          let test = chartPoints.slice();
 
-         let filteredData = test.filter(item => {
-         return item['value'] !== null
-         });
-         filteredData.forEach(item => {
-         return (item['value'] = item['value'] * 1)
-         });
+         let filteredData = test
+             .filter(item => {return item['value'] !== null})
+             .forEach(item => {return (item['value'] = item['value'] * 1)});
 
 
         /**
@@ -61,45 +67,40 @@ class Chart{
             }
         }
 
-
         let max=sortMaxMin(test);
+        let min=sortMaxMin(test,'value',false);
 
-
-        let canvas=document.querySelector(`[data-id="${settings.id}"] canvas `);
-
-        let width=canvas.getBoundingClientRect().width*pixelRatio;
-        let heigth=canvas.getBoundingClientRect().height*pixelRatio;
-
-        canvas.width=width;
-        canvas.height=heigth;
-
-        let scaleX=width/chartPoints.length;
-        let scaleY=heigth/max;
+        this.scaleX=this.width/chartPoints.length;
+        this.scaleY=this.heigth/max;
 
         console.log(
-            'width',width,'\n',
-            'heigth',heigth,'\n',
-            'scaleX',scaleX,'\n',
-            'scaleY',scaleY,'\n',
+            'max',max,'\n',
+            'min',min,'\n',
+            'width',this.width,'\n',
+            'heigth',this.heigth,'\n',
+            'scaleX',this.scaleX,'\n',
+            'scaleY',this.scaleY,'\n',
             'length',chartPoints.length,'\n',
         );
 
 
 
+        let context=this.canvas.getContext('2d');
 
+        context.fillStyle=settings.chartBackground;
+        context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-        let context=canvas.getContext('2d');
-        context.fillStyle='white';
-        context.fillRect(0,0,canvas.width,canvas.height);
         context.beginPath();
+
         context.lineJoin = 'bevel';
         context.lineCap = 'butt';
-        context.lineWidth = lineWidth;
+
+        context.lineWidth = settings.pixelRatio*settings.chartLineWidth;
         context.globalAlpha=settings.globalAlpha;
-        context.strokeStyle = settings.chartColor;
+        context.strokeStyle = settings.SecondLineDataColor;
 
         chartPoints.forEach((y, x)=>{
-                context.lineTo(x*scaleX,y['value']*scaleY);
+                context.lineTo(x*this.scaleX,y['value']*this.scaleY);
         });
 
         context.stroke();
@@ -113,8 +114,12 @@ class Chart{
             charts: '.charts',
             chart:'.chart',
             id:1,
+            chartBackground:'#FFFEFE',
             globalAlpha:1,
-            chartColor:'#0e26ff',
+            chartLineWidth:2,
+            pixelRatio: window.devicePixelRatio,
+            SecondLineDataColor:'#7F7E7E',
+            FirstLineDataColor:'#1919FF'
         }
     }
 }

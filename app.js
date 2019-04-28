@@ -137,10 +137,10 @@ function randomInteger(min, max) {
     rand = Math.round(rand);
     return rand;
 }
-let data={SecondLineData:[]};
+let data={SecondLineDataColor:[]};
 for(let i=0;i<2500;i++){
     let x= {value:randomInteger(1,10000)};
-    data.SecondLineData.push(x);
+    data.SecondLineDataColor.push(x);
 };
 
 new Chart(data).init;
