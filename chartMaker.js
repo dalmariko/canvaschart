@@ -6,8 +6,8 @@ class Chart{
 
   get init() {
         Chart.addTemplate(this._settings);
-        Chart.bildCharts(this._settings);
-        Chart.renderChart(this._settings);
+        Chart.makeCanvas(this._settings);
+        Chart.addCanvasPoints(this._settings);
         return this;
     }
 
@@ -24,7 +24,7 @@ class Chart{
         </div>`;
     }
 
-    static bildCharts(settings) {
+    static makeCanvas(settings) {
 
         this.canvas=document.querySelector(`[data-id="${settings.id}"] canvas`);
 
@@ -37,69 +37,83 @@ class Chart{
         return this;
     }
 
+    static addCanvasPoints(settings) {
 
-    static renderChart(settings){
+        this.context=this.canvas.getContext('2d');
 
-        let chartPoints=settings.FirstLineData;
-        // let chartPoints=settings.SecondLineData;
+        this.context.fillStyle='#FFFEFE';
+        this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-         let filteredData = chartPoints.filter(item => {return item['value'] !== null});
-
-
-        /**
-         * @param data - array
-         * @param fild - fild in array
-         * @param desc === true -> max ferst, === false -> max last
-         * @returns {max or min number in array}
-         */
-        function sortMaxMin(data, fild = 'value', desc = true) {
-            try {
-                return data.slice().filter(item => {return item['value'] !== null}).sort((a, b) => {
-                    return desc ? b[fild] - a[fild] : a[fild] - b[fild];
-                });
-            }
-            catch (e) {
-                console.error(e)
-            }
+               for(let points in settings){
+                  if(points=='FirstLineData' || points=='SecondLineData'){
+                        Chart.bildChart(settings[points]);
+                  }
         }
-
-        let max=sortMaxMin(chartPoints)[0]['value']*1;
-        let min=sortMaxMin(chartPoints,'value',false)[0]['value']*1;
-
-        this.scaleX=this.width/chartPoints.length;
-        this.scaleY=this.heigth/max;
-
-        console.log(
-            'max',max,'\n',
-            'min',min,'\n',
-            'width',this.width,'\n',
-            'heigth',this.heigth,'\n',
-            'scaleX',this.scaleX,'\n',
-            'scaleY',this.scaleY,'\n',
-            'length',filteredData.length,'\n',
-        );
-
-
-        let context=this.canvas.getContext('2d');
-
-        context.fillStyle=settings.chartBackground;
-        context.fillRect(0,0,this.canvas.width,this.canvas.height);
-
-        context.beginPath();
-
-        context.lineJoin = 'bevel';
-        context.lineCap = 'butt';
-
-        context.lineWidth = settings.pixelRatio*settings.chartLineWidth;
-        context.globalAlpha=settings.globalAlpha;
-        context.strokeStyle = settings.SecondLineDataColor;
-
-        filteredData.forEach((y, x)=>{
-            context.lineTo(x*this.scaleX,y['value']*this.scaleY);
-        });
-
-        context.stroke();
     }
+
+    static bildChart(points){
+
+    let chartPoints=points;
+
+    let filteredData = chartPoints.filter( item => {return item['value'] !== null} );
+
+    /**
+     * @param data - array
+     * @param fild - fild in array
+     * @param desc === true -> max ferst, === false -> max last
+     * @returns {max or min number in array}
+     */
+    function sortMaxMin(data, fild = 'value', desc = true) {
+        try {
+            return data.slice().filter(item => {return item['value'] !== null}).sort((a, b) => {
+                return desc ? b[fild] - a[fild] : a[fild] - b[fild];
+            });
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }
+
+    let max=sortMaxMin(chartPoints)[0]['value']*1;
+
+    let min=sortMaxMin(chartPoints,'value',false)[0]['value']*1;
+
+    this.scaleX=this.width/chartPoints.length;
+    this.scaleY=this.heigth/max;
+
+
+
+/*
+     console.log(
+     'max',max,'\n',
+     'min',min,'\n',
+     'width',this.width,'\n',
+     'heigth',this.heigth,'\n',
+     'scaleX',this.scaleX,'\n',
+     'scaleY',this.scaleY,'\n',
+     'length',filteredData.length,'\n',
+     );
+*/
+
+
+
+    this.context.beginPath();
+
+    this.context.lineJoin = 'bevel';
+    this.context.lineCap = 'butt';
+
+    this.context.lineWidth = window.devicePixelRatio*1;
+    this.context.globalAlpha=1;
+    this.context.strokeStyle = '#7F7E7E';
+
+    filteredData.forEach((y, x)=>{
+        this.context.lineTo( x*this.scaleX,y['value']*this.scaleY );
+    });
+
+    this.context.stroke();
+}
+
+
 
     static getDefaultsettings() {
         /**
