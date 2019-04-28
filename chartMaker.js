@@ -5,7 +5,6 @@ class Chart{
     }
 
   get init() {
-        console.log(this._settings);
         Chart.addTemplate(this._settings);
         Chart.bildCharts(this._settings);
         Chart.renderChart(this._settings);
@@ -44,8 +43,6 @@ class Chart{
         let chartPoints=settings.FirstLineData;
         // let chartPoints=settings.SecondLineData;
 
-         let maxMinSort = chartPoints.slice();
-
          let filteredData = chartPoints.filter(item => {return item['value'] !== null});
 
 
@@ -57,7 +54,7 @@ class Chart{
          */
         function sortMaxMin(data, fild = 'value', desc = true) {
             try {
-                return data.slice().sort((a, b) => {
+                return data.slice().filter(item => {return item['value'] !== null}).sort((a, b) => {
                     return desc ? b[fild] - a[fild] : a[fild] - b[fild];
                 });
             }
@@ -66,10 +63,10 @@ class Chart{
             }
         }
 
-        let max=sortMaxMin(maxMinSort)[0]['value'];
-        let min=sortMaxMin(maxMinSort,'value',false)[0]['value'];
+        let max=sortMaxMin(chartPoints)[0]['value']*1;
+        let min=sortMaxMin(chartPoints,'value',false)[0]['value']*1;
 
-        this.scaleX=this.width/filteredData.length;
+        this.scaleX=this.width/chartPoints.length;
         this.scaleY=this.heigth/max;
 
         console.log(
