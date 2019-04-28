@@ -77,3 +77,22 @@ for(let i=0;i<2500;i++){
 
 new Chart(data).init;
 */
+
+/*
+
+My variand format points of data charts
+
+let data = [
+    {
+        x:[123123123,123123123,1231231231,123123123],
+        y: [1, 2, 3, 4, 5, 6],
+        chartName:'ferstChart',
+        chartColor:'#ffff',
+    },
+    {
+        x:[123123123,123123123,1231231231,123123123],
+        y: [10, 20, 30, 40, 50, 60],
+        chartName:'secondChart',
+        chartColor:'#00000',
+    }
+];*/

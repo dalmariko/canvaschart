@@ -1,7 +1,7 @@
 class Chart{
 
     constructor(chart,settings) {
-        this._settings = Object.assign(Chart.getDefaultsettings(),chart,settings);
+        this._settings = Object.assign(Chart.getDefaultsettings,chart,settings);
     }
 
   get init() {
@@ -45,10 +45,10 @@ class Chart{
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
                for(let points in settings){
-                  if(points=='FirstLineData' || points=='SecondLineData'){
-                        Chart.bildChart(settings[points]);
-                  }
+                   points=='FirstLineData' ? Chart.bildChart(settings[points]): this.context.strokeStyle = '#7F7E7E';
+                   points=='SecondLineData' ? Chart.bildChart(settings[points]): this.context.strokeStyle = '#1919FF';
         }
+
     }
 
     static bildChart(points){
@@ -102,11 +102,11 @@ class Chart{
     this.context.lineJoin = 'bevel';
     this.context.lineCap = 'butt';
 
-    this.context.lineWidth = window.devicePixelRatio*1;
     this.context.globalAlpha=1;
-    this.context.strokeStyle = '#7F7E7E';
+    this.context.lineWidth = window.devicePixelRatio*2;
 
-    filteredData.forEach((y, x)=>{
+
+    chartPoints.forEach((y, x)=>{
         this.context.lineTo( x*this.scaleX,y['value']*this.scaleY );
     });
 
@@ -115,7 +115,7 @@ class Chart{
 
 
 
-    static getDefaultsettings() {
+    static get getDefaultsettings() {
         /**
          * Default settings
          */
