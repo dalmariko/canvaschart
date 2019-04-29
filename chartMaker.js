@@ -37,18 +37,27 @@ class Chart{
         return this;
     }
 
-     addCanvasPoints() {
+     renderTextsY(points) {
+         this.context.font = "12px serif";
+         this.canvas.fillStyle = "#ff0000";
+         points.forEach((item,i)=>{
+                if(i%190==0){
+                    this.context.fillText(item['date'], i*this.scaleX, 390);
+                }
+            });
+    }
+
+     addCanvasPoints(){
 
         this.context=this.canvas.getContext('2d');
 
-        this.context.fillStyle=this._settings.chartBackground;
-        this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
+        // this.context.fillStyle=this._settings.chartBackground;
+        // this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
                for(let points in this._settings){
-                   points=='FirstLineData' ? this.bildChart(this._settings[points]): this.context.strokeStyle = this._settings.FirstLineDataColor;
-                   points=='SecondLineData' ? this.bildChart(this._settings[points]): this.context.strokeStyle = this._settings.SecondLineDataColor;
+                   points=='FirstLineData' ? this.bildChart(this._settings[points]) : this.context.strokeStyle = this._settings.FirstLineDataColor;
+                   points=='SecondLineData' ? this.bildChart(this._settings[points]) : this.context.strokeStyle = this._settings.SecondLineDataColor;
         }
-
     }
 
      bildChart(points){
@@ -81,11 +90,10 @@ class Chart{
     this.scaleX=this.width/filteredData.length;
     this.scaleY=this.heigth/max;
 
-         // mainOffsetX = -mainMinX * mainScaleX + paddingHor;
-         // mainOffsetY = mainHeight - mainMinY * mainScaleY;
-
         this.offsetX=(-0*this.scaleX)+(11*this._settings.pixelRatio);
-        this.offsetY=this.heigth-(min*this.scaleY);
+        this.offsetY=(this.heigth-(min*this.scaleY))*-1;
+
+/*
 
      console.log(
      'offsetX',this.offsetX,'\n',
@@ -98,6 +106,7 @@ class Chart{
      'scaleY',this.scaleY,'\n',
      'length',filteredData.length,'\n',
      );
+*/
 
     this.context.beginPath();
 
@@ -107,8 +116,10 @@ class Chart{
     this.context.globalAlpha=1;
     this.context.lineWidth = this._settings.pixelRatio*this._settings.chartLineWidth;
 
+this.renderTextsY(points);
+
     filteredData.forEach((y, x)=>{
-        this.context.lineTo( x*this.scaleX+this.offsetX,y['value']*this.scaleY-this.offsetY );
+        this.context.lineTo( x*this.scaleX,y['value']*this.scaleY );
     });
 
     this.context.stroke();
