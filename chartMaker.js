@@ -5,31 +5,31 @@ class Chart{
     }
 
   get init() {
-        Chart.addTemplate(this._settings);
-        Chart.makeCanvas(this._settings);
-        Chart.addCanvasPoints(this._settings);
+        this.addTemplate();
+        this.makeCanvas();
+        this.addCanvasPoints();
         return this;
     }
 
 
-    static addTemplate(settings) {
-        let template = Chart.template(settings);
-        document.querySelector(settings.charts).insertAdjacentHTML('beforeend', template);
+     addTemplate() {
+        let template = this.template(this._settings.id);
+        document.querySelector(this._settings.charts).insertAdjacentHTML('beforeend', template);
     }
 
-    static template(settings) {
+     template(id) {
         return ` 
-        <div class="chart" data-id="${settings.id}">
+        <div class="chart" data-id="${id}">
          <canvas></canvas>
         </div>`;
     }
 
-    static makeCanvas(settings) {
+     makeCanvas() {
 
-        this.canvas=document.querySelector(`[data-id="${settings.id}"] canvas`);
+        this.canvas=document.querySelector(`[data-id="${this._settings.id}"] canvas`);
 
-        this.width=this.canvas.getBoundingClientRect().width*settings.pixelRatio;
-        this.heigth=this.canvas.getBoundingClientRect().height*settings.pixelRatio;
+        this.width=this.canvas.getBoundingClientRect().width*this._settings.pixelRatio;
+        this.heigth=this.canvas.getBoundingClientRect().height*this._settings.pixelRatio;
 
         this.canvas.width=this.width;
         this.canvas.height=this.heigth;
@@ -37,21 +37,21 @@ class Chart{
         return this;
     }
 
-    static addCanvasPoints(settings) {
+     addCanvasPoints() {
 
         this.context=this.canvas.getContext('2d');
 
-        this.context.fillStyle='#FFFEFE';
+        this.context.fillStyle=this._settings.chartBackground;
         this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-               for(let points in settings){
-                   points=='FirstLineData' ? Chart.bildChart(settings[points]): this.context.strokeStyle = '#7F7E7E';
-                   points=='SecondLineData' ? Chart.bildChart(settings[points]): this.context.strokeStyle = '#1919FF';
+               for(let points in this._settings){
+                   points=='FirstLineData' ? this.bildChart(this._settings[points]): this.context.strokeStyle = this._settings.FirstLineDataColor;
+                   points=='SecondLineData' ? this.bildChart(this._settings[points]): this.context.strokeStyle = this._settings.SecondLineDataColor;
         }
 
     }
 
-    static bildChart(points){
+     bildChart(points){
 
     let chartPoints=points;
 
@@ -78,13 +78,18 @@ class Chart{
 
     let min=sortMaxMin(chartPoints,'value',false)[0]['value']*1;
 
-    this.scaleX=this.width/chartPoints.length;
+    this.scaleX=this.width/filteredData.length;
     this.scaleY=this.heigth/max;
 
+         // mainOffsetX = -mainMinX * mainScaleX + paddingHor;
+         // mainOffsetY = mainHeight - mainMinY * mainScaleY;
 
+        this.offsetX=(-0*this.scaleX)+(11*this._settings.pixelRatio);
+        this.offsetY=this.heigth-(min*this.scaleY);
 
-/*
      console.log(
+     'offsetX',this.offsetX,'\n',
+     'offsetY',this.offsetY,'\n',
      'max',max,'\n',
      'min',min,'\n',
      'width',this.width,'\n',
@@ -93,9 +98,6 @@ class Chart{
      'scaleY',this.scaleY,'\n',
      'length',filteredData.length,'\n',
      );
-*/
-
-
 
     this.context.beginPath();
 
@@ -103,11 +105,10 @@ class Chart{
     this.context.lineCap = 'butt';
 
     this.context.globalAlpha=1;
-    this.context.lineWidth = window.devicePixelRatio*2;
+    this.context.lineWidth = this._settings.pixelRatio*this._settings.chartLineWidth;
 
-
-    chartPoints.forEach((y, x)=>{
-        this.context.lineTo( x*this.scaleX,y['value']*this.scaleY );
+    filteredData.forEach((y, x)=>{
+        this.context.lineTo( x*this.scaleX+this.offsetX,y['value']*this.scaleY-this.offsetY );
     });
 
     this.context.stroke();
@@ -127,8 +128,8 @@ class Chart{
             globalAlpha:1,
             chartLineWidth:2,
             pixelRatio: window.devicePixelRatio,
-            SecondLineDataColor:'#7F7E7E',
-            FirstLineDataColor:'#1919FF'
+            FirstLineDataColor:'#1919FF',
+            SecondLineDataColor:'#7F7E7E'
         }
     }
 }
