@@ -37,15 +37,15 @@ class Chart{
         return this;
     }
 
-     renderTextsY(points) {
+/*     renderTextsY(points) {
          this.context.font = "12px serif";
          this.canvas.fillStyle = "#ff0000";
          points.forEach((item,i)=>{
-                if(i%190==0){
+                if(i%250==0){
                     this.context.fillText(item['date'], i*this.scaleX, 390);
                 }
             });
-    }
+    }*/
 
      addCanvasPoints(){
 
@@ -58,13 +58,9 @@ class Chart{
                    points=='FirstLineData' ? this.bildChart(this._settings[points]) : this.context.strokeStyle = this._settings.FirstLineDataColor;
                    points=='SecondLineData' ? this.bildChart(this._settings[points]) : this.context.strokeStyle = this._settings.SecondLineDataColor;
         }
+        // this.renderTextsY(this._settings['SecondLineData']);
+
     }
-
-     bildChart(points){
-
-    let chartPoints=points;
-
-    let filteredData = chartPoints.filter( item => {return item['value'] !== null} );
 
     /**
      * @param data - array
@@ -72,20 +68,26 @@ class Chart{
      * @param desc === true -> max ferst, === false -> max last
      * @returns {max or min number in array}
      */
-    function sortMaxMin(data, fild = 'value', desc = true) {
-        try {
-            return data.slice().filter(item => {return item['value'] !== null}).sort((a, b) => {
-                return desc ? b[fild] - a[fild] : a[fild] - b[fild];
-            });
-        }
-        catch (e) {
-            console.error(e)
-        }
+    sortMaxMin(data, fild = 'value', desc = true) {
+    try {
+        return data.filter(item => {return item['value'] !== null}).sort((a, b) => {
+            return desc ? b[fild] - a[fild] : a[fild] - b[fild];
+        });
     }
+    catch (e) {
+        console.error(e)
+    }
+}
 
-    let max=sortMaxMin(chartPoints)[0]['value']*1;
+    bildChart(points){
 
-    let min=sortMaxMin(chartPoints,'value',false)[0]['value']*1;
+    let filteredData = points.slice().filter( item => {return item['value'] !== null} );
+
+
+   let chartPoints=this.sortMaxMin(points);
+
+    let max=chartPoints[0]['value']*1;
+    let min=chartPoints[chartPoints.length-1]['value']*1;
 
     this.scaleX=this.width/filteredData.length;
     this.scaleY=this.heigth/max;
@@ -93,8 +95,8 @@ class Chart{
         this.offsetX=(-0*this.scaleX)+(11*this._settings.pixelRatio);
         this.offsetY=(this.heigth-(min*this.scaleY))*-1;
 
-/*
 
+/*
      console.log(
      'offsetX',this.offsetX,'\n',
      'offsetY',this.offsetY,'\n',
@@ -116,7 +118,7 @@ class Chart{
     this.context.globalAlpha=1;
     this.context.lineWidth = this._settings.pixelRatio*this._settings.chartLineWidth;
 
-this.renderTextsY(points);
+
 
     filteredData.forEach((y, x)=>{
         this.context.lineTo( x*this.scaleX,y['value']*this.scaleY );
@@ -144,3 +146,5 @@ this.renderTextsY(points);
         }
     }
 }
+
+

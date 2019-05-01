@@ -80,19 +80,36 @@ new Chart(data).init;
 
 /*
 
-My variand format points of data charts
+// My variand format points of data charts
 
 let data = [
     {
-        x:[123123123,123123123,1231231231,123123123],
-        y: [1, 2, 3, 4, 5, 6],
-        chartName:'ferstChart',
-        chartColor:'#ffff',
+        x: [123123123, 123123123, 1231231231, 123123123],
+        ferstChartY: [1, 2, 3, 4, 5, 6],
+        secondChartY: [10, 20, 30, 40, 50, 60],
+        chartNames: {
+            ferstChart: 'ferstChart',
+            secondChart: 'secondChart'
+        },
+        chartColors: {
+            ferstChart: '#ffff',
+            secondChart: '#00000'
+        },
+        ArrowsData: [
+            {
+                type_of_rho: "direct",
+                min_period_id: 13213543654,
+                max_period_id: 1232454665324,
+                tau: 2
+            },
+            {
+                type_of_rho: "reverse",
+                min_period_id: 1321353565844,
+                max_period_id: 1354646543213,
+                tau: 9
+            }
+        ]
     },
-    {
-        x:[123123123,123123123,1231231231,123123123],
-        y: [10, 20, 30, 40, 50, 60],
-        chartName:'secondChart',
-        chartColor:'#00000',
-    }
-];*/
+];
+*/
+
